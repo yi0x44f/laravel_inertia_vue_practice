@@ -6,19 +6,28 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
     
     public function register(Request $request){
+
+
         // Validation
-        $field = $request->validate([
+        $fields = $request->validate([
+            'avatar'=>['file', 'nullable', 'max:3000'],
             'name'=>['required', 'max:255'],
             'email'=>['required','email', 'max:255', 'unique:users'],
             'password'=>['required','confirmed']
         ]);
+        //Handle avatar
+        if ($request->hasFile('avatar')){
+            $fields['avatar'] = Storage::disk('public')->put('avatars', $request->avatar);
+        }
+
         // Register
-        $user = User::create($field);
+        $user = User::create($fields);
 
         //Login
         Auth::login($user);

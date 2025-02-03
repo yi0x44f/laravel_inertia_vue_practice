@@ -5,14 +5,46 @@
 
     <div class="w-2/4 mx-auto">
         <form @submit.prevent="submit">
+            <!--Upload Avatar-->
+            <div class="grid place-items-center">
+                <div class="relative w-30 h-30 rounded-full overflow-hidden border border-slate-300">
+                    <label for="avatar" class="absolute inset-0 grid content-end cursor-pointer">
+                        <span class="bg-white/70 pb-2 text-center">Avatar</span>
+                    </label>
+                    <input type="file" id="avatar" @input="change" hidden>
+                    <img :src="form.preview?form.preview:'default.webp'" alt="" class="object-cover">
+                </div>
+                <small>{{ form.errors.avatar }}</small>
+
+            </div>
 
             <div class="mb-6">
-                
-                <TextInput name="Name" v-model="form.name" :message="form.errors.name"></TextInput>
-                <TextInput name="Email" v-model="form.email" :message="form.errors.email" type="email"></TextInput>
-                <TextInput name="Password" v-model="form.password" :message="form.errors.password"></TextInput>
-                <TextInput name="Confirm Password" v-model="form.password_confirmation" :message="form.errors.password_confirmation"></TextInput>
+                <TextInput 
+                    name="Name" 
+                    v-model="form.name" 
+                    :message="form.errors.name">
+                </TextInput>
 
+                <TextInput 
+                    name="Email" 
+                    v-model="form.email" 
+                    :message="form.errors.email" 
+                    type="email">
+                </TextInput>
+
+                <TextInput 
+                    name="Password" 
+                    v-model="form.password" 
+                    :message="form.errors.password"
+                    type="password">
+                </TextInput>
+
+                <TextInput 
+                    name="Confirm Password" 
+                    v-model="form.password_confirmation" 
+                    :message="form.errors.password_confirmation"
+                    type="password">
+                </TextInput>
             </div>
 
             <div>
@@ -39,7 +71,9 @@ const form = useForm({
     name: null,
     email: null,
     password: null,
-    password_confirmation: null
+    password_confirmation: null,
+    avatar: null,
+    preview: null,
 });
 
 const submit = function(){
@@ -57,6 +91,10 @@ const submit = function(){
     });
 };
 
+const change = (event)=>{
+    form.avatar = event.target.files[0];
+    form.preview = URL.createObjectURL(event.target.files[0]);
+}
 
 </script>
 

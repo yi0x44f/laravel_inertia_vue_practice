@@ -13,7 +13,8 @@
                     <Link :href="route('about')" class="nav-link" :class="{'bg-slate-700':$page.component==='About'}">About</Link>
                 </div>
 
-                <div v-if="$page.props.auth.user">
+                <div class="flex space-x-4" v-if="$page.props.auth.user">
+                    <img class="avatar" :src=" $page.props.auth.user.avatar?'storage/'+$page.props.auth.user.avatar:'/default.webp'" alt="" >
                     <Link :href="route('dashboard')" class="nav-link" :class="{'bg-slate-700':$page.component==='Dashboard'}">Dashboard</Link>
                     <Link :href="route('logout')" method="post" as="button" type="button" class="nav-link">Logout</Link>
                 </div>
