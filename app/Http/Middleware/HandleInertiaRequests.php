@@ -38,8 +38,11 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             //'auth.user' =>'Admin' ?? null,
             'auth.user' => $request->user()
-            ? $request->user()->only('id', 'name', 'avatar')
-            : null
+                ? $request->user()->only('id', 'name', 'avatar')
+                : null,
+            'flash' => [
+                'message' => fn () => $request->session()->get('message'),
+            ],
         ]);
     }
 }

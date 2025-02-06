@@ -12,8 +12,6 @@ class AuthController extends Controller
 {
     
     public function register(Request $request){
-
-
         // Validation
         $fields = $request->validate([
             'avatar'=>['file', 'nullable', 'max:3000'],
@@ -33,7 +31,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         //Redirect
-        return redirect()->route('home');
+        return redirect()->route('dashboard')->with('message','Welcome');
 
     }
 
@@ -46,7 +44,7 @@ class AuthController extends Controller
         if (Auth::attempt($fields, $request->remember)) {
             $request->session()->regenerate();
  
-            return redirect()->intended('/dashboard');
+            return redirect()->route('dashboard')->with('message','Welcome back');
         }
  
         return back()->withErrors([
@@ -62,5 +60,13 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
      
         return redirect()->route('home');    
+    }
+
+    public function delete(Request $request){
+        // dd($request->id);
+        if( Auth::user()->can('delete', User::class) ){
+            User::destroy( $request->id );
+        }
+        return redirect()->route('home');
     }
 }
