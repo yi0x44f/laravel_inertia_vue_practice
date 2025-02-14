@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\YoutubeController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,6 +21,8 @@ Route::get('/', function (Request $request) {
         ]);
 })->name('home');
 
+
+
 Route::inertia('/about','About',['user'=>'Yi'])->name('about');
 
 Route::middleware('guest')->group( function(){
@@ -36,4 +39,11 @@ Route::middleware('auth')->group( function(){
     Route::post('/delete',[
         AuthController::class, 'delete'])->name('delete');
     Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
+    
+    // Handling YoutubeDownload
+    Route::get('/download/{filename}', function ($filename){
+        return response()->download(public_path('/storage/video/' . $filename));
+    })->where('filename', '.*');
+    Route::post('/download',[YoutubeController::class, 'download']);
+    Route::inertia('/download','Download')->name('download');
 });

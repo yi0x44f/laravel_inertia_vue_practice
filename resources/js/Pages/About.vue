@@ -1,6 +1,6 @@
 <template>
     <div>
-        aboout {{ user }}
+        This is a tool for fun.
     </div>
 </template>
 
