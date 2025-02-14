@@ -17,6 +17,7 @@
         "@tailwindcss/postcss": "^4.0.0",
         "@vitejs/plugin-vue": "^5.2.1",
         "bootstrap": "^5.3.3",
+        "flowbite": "^3.1.2",
         "lodash": "^4.17.21",
         "vue": "^3.5.13"
     }

@@ -11,11 +11,17 @@ class YoutubeController extends Controller
     public function download(Request $request){
         // dd($request);
         $url = $request->input('url');
+        $format = $request->input('format');
 
         chdir('../public/storage/video');
 
-        $process = new Process(["yt-dlp", "--output", "%(title)s.%(ext)s", $url]);
-        $process->run();
+        if($format=='mp4'){
+            $process = new Process(["yt-dlp","--format","mp4", "--output", "%(title)s.%(ext)s", $url]);
+            $process->run();
+        } else if($format=='mp3'){
+            $process = new Process(["yt-dlp","-x", "--audio-format","mp3", "--output", "%(title)s.%(ext)s", $url]);
+            $process->run();
+        }
 
         if (!$process->isSuccessful()){
             return Inertia::render( 'Download', [
@@ -23,13 +29,18 @@ class YoutubeController extends Controller
                 'downloadable' => false,
             ] );
         }
+        $output = $process->getOutput();
 
-        $process = new Process(['yt-dlp', '--get-filename', "--output", "%(title)s.%(ext)s", $url]);
-        $process->run();
+        if (preg_match('/\[download\] (.+?) has already been downloaded/', $output, $matches) ||
+            preg_match('/\[download\] Destination: (.+)/', $output, $matches)) {
+            $filename = trim($matches[1]);
+        }else{
+            return Inertia::render( 'Download', [
+                'filename' => "Error. Please try again.",
+                'downloadable' => false,
+            ] );
+        };
 
-        $filename = $process->getOutput();
-
-        // dd($filename);
         return Inertia::render( 'Download', [
             'filename' => $filename,
             'downloadable' => true,
