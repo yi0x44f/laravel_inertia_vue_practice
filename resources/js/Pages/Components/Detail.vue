@@ -1,11 +1,11 @@
 <template>
 
 
-    <div class="grid grid-cols-2 gap-4 p-2 text-sm">
-      <div class="text-slate-500 font-medium uppercase">Email:</div>
-      <div class="text-slate-800 font-semibold">{{ user.email }}</div>
-      <div class="text-slate-500 font-medium uppercase">Registration Date:</div>
-      <div class="text-slate-800 font-semibold">{{ getDate(user.created_at) }}</div>
+    <div class="grid grid-cols-4 gap-4 p-2 text-sm">
+      <div class="text-slate-500 font-medium uppercase col-span-1  ">Email:</div>
+      <div class="text-slate-800 font-semibold col-span-3">{{ user.email }}</div>
+      <div class="text-slate-500 font-medium uppercase col-span-1">Date:</div>
+      <div class="text-slate-800 font-semibold col-span-3">{{ getDate(user.created_at) }}</div>
     </div>
 
 

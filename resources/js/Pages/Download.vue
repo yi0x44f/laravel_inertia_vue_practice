@@ -20,6 +20,9 @@
             <a class="primary-btn" v-if="downloadable&&!form.processing" :href="`/download/${encodeURI(filename.trim())}`">Download</a>
         </div>
     </div>
+    <p>Warning: this service is using manual uploaded cookie by Yi.</p>
+    <p>The cookie may be expired.</p>
+    <p>Please contact me.</p>
 </template>
 
 <script setup>

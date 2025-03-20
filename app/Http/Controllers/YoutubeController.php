@@ -13,24 +13,28 @@ class YoutubeController extends Controller
         $url = $request->input('url');
         $format = $request->input('format');
 
-        chdir('../public/storage/video');
 
+        
+        chdir('./storage/video');
         if($format=='mp4'){
-            $process = new Process(["yt-dlp","--format","mp4", "--output", "%(title)s.%(ext)s", $url]);
+            $process = new Process(["yt-dlp","--cookies","cookies.txt", "--format","mp4", "--output", "%(title)s.%(ext)s", $url]);
             $process->run();
         } else if($format=='mp3'){
-            $process = new Process(["yt-dlp","-x", "--audio-format","mp3", "--output", "%(title)s.%(ext)s", $url]);
+            $process = new Process(["yt-dlp","--cookies","cookies.txt","-x", "--audio-format","mp3", "--output", "%(title)s.%(ext)s", $url]);
             $process->run();
         }
 
+        // dd($process->getErrorOutput());
+
         if (!$process->isSuccessful()){
+
             return Inertia::render( 'Download', [
-                'filename' => "Please enter valid URL.",
+                'filename' => "Invalid URL / Server needs YT loggin cookies",
                 'downloadable' => false,
             ] );
         }
         $output = $process->getOutput();
-
+        // dd($output);
         if (preg_match('/\[download\] (.+?) has already been downloaded/', $output, $matches) ||
             preg_match('/\[download\] Destination: (.+)/', $output, $matches)) {
             $filename = trim($matches[1]);
